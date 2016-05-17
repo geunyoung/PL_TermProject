@@ -628,33 +628,15 @@ def Test_method(input):
     print print_node(result)
 
 def Test_All():
-    Test_method("( + 1 2 )")
-    Test_method("( - ( + 1 2 ) 4")
-    Test_method("( > 1 5 )")
-    Test_method("( cond ( ( null? ' ( 1 2 3 ) ) 1 ) ( ( > 100 10 ) 2 ) ( #T 3 ) ")
+
+    input_prompt = raw_input("> ")
+
+    while True:
+        if input_prompt =="q" or input_prompt =="quit":
+            print "bye"
+            break;
+        Test_method(input_prompt)
+        input_prompt = raw_input("> ")
 
 
-    #Test_method("( car ' ( 2 3 4 ) )")
-    #Test_method("( + 1 2 )")
-    #Test_method("( + ( + 1 2 ) 4")
-    #Test_method("( null? ' ( 1 2 3 )")
-    #Test_method("( cond ( #T 8 ) )")
-    #Test_method(" ( eq? 3 3 )")
-    #Test_method("( cond ( ( null? ' ( 1 2 3 ) ) 1 ) ( ( > 100 10 ) 2 ) ( #F 3 ) ( #T 5 )")
-    #Test_method("( cond ( ( > 100 10 ) 3 ) )")
-    #Test_method("( null? ' ( 1 2 3 )")
-    #Test_method("( > 5 4")
-    #Test_method("( > 1 5")
-    #Test_method("( = 10 10")
-    #Test_method("( not #F )")
-    #Test_method("( cdr ' ( 2 3 4 ) )")
-    #Test_method("( cons ' ( 2 3 ) ' ( 4 5 6 ) )")
-    #Test_method("( null? ' ( )")
-    #Test_method("( atom? ' a )")
-    #Test_method("( atom? ' ( ) )")
-    #Test_method("( eq? 3 3 )")
-    #Test_method("( eq? ' a ' a )")
-    #Test_method("( car ( cdr ' ( 2 3 4 ) )")
-    #Test_method("( cdr ' ( 3 4 5 ) ) )")
-    #Test_method("( cons ( car ( cdr ' ( 2 3 4 ) ) ) ( cdr ' ( 3 4 5 ) ) )")
 Test_All()
