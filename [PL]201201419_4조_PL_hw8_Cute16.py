@@ -47,8 +47,11 @@ def is_type_keyword(token):
         return True
     return False
 
+dictionary = dict()
+def insertTable(id, value):
 
-
+    dictionary[id] = value
+    return None
 
 def _get_keyword_type(token):
     return {
@@ -323,9 +326,17 @@ class CuteInterpreter(object):
     def run_arith(self, arith_node):
         pass
 
+
     def run_func(self, func_node):
+
         rhs1 = func_node.next
         rhs2 = rhs1.next if rhs1.next is not None else None
+        if rhs1 != None:
+            if rhs1.value in dictionary.keys():
+                rhs1 = dictionary[rhs1.value]
+        if rhs2 != None:
+            if rhs2.value in dictionary.keys():
+                rhs2 = dictionary[rhs1.value]
 
         def create_quote_node(node, list_flag = False):
             """
@@ -374,6 +385,7 @@ class CuteInterpreter(object):
 
         elif func_node.type is TokenType.CDR:
             #작성
+
             if not is_quote_list(rhs1):
                 print ("car error!")
             rhs1 = self.run_expr(rhs1)
@@ -504,6 +516,20 @@ class CuteInterpreter(object):
                         return rhs1.value.next
                     else:
                         rhs1 = rhs1.next
+
+        elif func_node.type is TokenType.DEFINE:
+            rhs1 = func_node.next
+            rhs2 = rhs1.next if rhs1.next is not None else None
+            if rhs2.type == TokenType.LIST:
+                if rhs2.value.type == TokenType.QUOTE:
+                    rhs2 = self.run_expr(rhs2)
+                    insertTable(rhs1.value, rhs2)
+                else :
+                    rhs2 = self.run_expr(rhs2)
+                    insertTable(rhs1.value, Node(TokenType.INT, rhs2.value))
+            elif rhs2.type == TokenType.INT:
+                    insertTable(rhs1.value, rhs2)
+            return None
         else:
             return None
 
@@ -538,7 +564,8 @@ class CuteInterpreter(object):
         if op_code.type in \
                 [TokenType.CAR, TokenType.CDR, TokenType.CONS, TokenType.ATOM_Q,\
                  TokenType.EQ_Q, TokenType.NULL_Q, TokenType.NOT, TokenType.PLUS, TokenType.MINUS, \
-                 TokenType.EQ, TokenType.DIV, TokenType.GT, TokenType.LT, TokenType.TIMES, TokenType.NOT, TokenType.COND]:
+                 TokenType.EQ, TokenType.DIV, TokenType.GT, TokenType.LT, TokenType.TIMES, TokenType.NOT,\
+                 TokenType.COND, TokenType.DEFINE]:
             return self.run_func(op_code)
         if op_code.type is TokenType.QUOTE:
             return l_node
@@ -548,7 +575,6 @@ class CuteInterpreter(object):
             print "expected a procedure that can be applied to arguments"
             print "Token Type is "+ op_code.value
             return None
-
 
 
 def print_node(node):
@@ -628,6 +654,18 @@ def Test_method(input):
     print print_node(result)
 
 def Test_All():
+
+    #Test_method(" ( cdr ' ( 1 4 3 )  ")
+    #Test_method(" ( not #F )")
+    #Test_method(" ( define a 8 ) ")
+    #Test_method(" ( define b ( + 5 4 )")
+    #Test_method(" ( define c ' ( 1 4 3 ) )")
+    #Test_method(" ( + b 3 )")
+    #Test_method(" ( + a 3 )")
+    #Test_method(" ( define a 7 ) ")
+    #Test_method(" ( + a 3 )")
+    #Test_method(" ( + 2 4 )")
+    #Test_method("( cdr c )")
 
     input_prompt = raw_input("> ")
 
